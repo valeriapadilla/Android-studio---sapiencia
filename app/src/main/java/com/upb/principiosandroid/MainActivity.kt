@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.upb.principiosandroid.componets.CardProductPreview
 import com.upb.principiosandroid.ui.theme.PrincipiosAndroidTheme
 
 class MainActivity : ComponentActivity() {
@@ -21,25 +22,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             PrincipiosAndroidTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting("hola",modifier = Modifier.padding(innerPadding, ))
+                    CardProductPreview();
+//                    Greeting("hola",modifier = Modifier.padding(innerPadding, ))
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    PrincipiosAndroidTheme {
-        Greeting("Android")
     }
 }
