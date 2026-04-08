@@ -23,11 +23,18 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,8 +44,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+
+
 import com.upb.principiosandroid.R
 import com.upb.principiosandroid.models.Product
+import com.upb.principiosandroid.viewModel.CounterViewModel
 
 
 //@Preview(showBackground = true) - como tiene una var obligatoria de entrada (producto)
@@ -56,7 +66,7 @@ fun CardProduct(
         colors = CardDefaults.cardColors(color),
         elevation = CardDefaults.elevatedCardElevation(30.dp),
         shape = RoundedCornerShape(9.dp),
-        onClick = {}
+        onClick = {println("Hola mundo")}
     ) {
         Row(
             modifier = Modifier
@@ -156,6 +166,69 @@ fun PesosPrueba(
         }
 
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun Contador() {
+
+    var contador by remember { mutableStateOf(0) }
+
+    Column {
+
+        Text("Valor: $contador")
+
+        Button(
+            onClick = {
+                contador++
+            }
+        ) {
+            Text("Sumar")
+        }
+
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun InputEjemplo() {
+
+    var texto by remember { mutableStateOf("") }
+
+    TextField(
+        value = texto,
+        onValueChange = { nuevoTexto ->
+            texto = nuevoTexto
+        }
+    )
+
+    Text("Escribiste: $texto")
+}
+
+@Composable
+fun CounterContent(
+    contador: Int,
+    onIncrement: () -> Unit
+) {
+    Column {
+        Text("Contador: $contador")
+
+        Button(onClick = onIncrement) {
+            Text("Sumar")
+        }
+    }
+}
+
+
+@Composable
+fun CounterScreen() {
+    val viewModel: CounterViewModel = viewModel()
+    val contador by viewModel.contador.collectAsState()
+
+    CounterContent(
+        contador = contador,
+        onIncrement = { viewModel.incrementar() }
+    )
 }
 
 

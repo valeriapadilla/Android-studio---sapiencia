@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.upb.principiosandroid"
+    namespace = "com.upb.listadependientes"
     compileSdk {
         version = release(36) {
             minorApiLevel = 1
@@ -12,7 +12,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.upb.principiosandroid"
+        applicationId = "com.upb.listadependientes"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
@@ -42,7 +42,6 @@ android {
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
