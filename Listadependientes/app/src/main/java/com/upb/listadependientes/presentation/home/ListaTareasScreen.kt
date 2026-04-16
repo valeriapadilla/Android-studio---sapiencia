@@ -1,6 +1,7 @@
 package com.upb.listadependientes.presentation.home
 
 import android.graphics.drawable.Icon
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -22,62 +23,54 @@ import java.util.Locale
 
 @Composable
 fun ListaTareasScreen(
-    modifier: Modifier = Modifier,
-    puente: TareaViewModel,
+    viewModel: TareaViewModel,
     onNavigateToAdd: () -> Unit
 ) {
-    //variables
-    val tareas by puente.tareas.collectAsState(initial = emptyList())
+
+    val tareas by viewModel.tareas.collectAsState(initial = emptyList())
     val fechaActual = remember {
         val formato = SimpleDateFormat("MMMM d, yyyy", Locale.getDefault())
         formato.format(Date())
     }
-
-    val tareasCompletas = tareas.count{it.estado==true}
-    val tareasPendientes = tareas.count{it.estado==false}
-
+    val completas = tareas.count { it.estado }
+    val incompletas = tareas.count { !it.estado }
 
     Scaffold(
-        //agregar el boton flotante
         floatingActionButton = {
             FloatingActionButton(
                 onClick = onNavigateToAdd
             ) {
-                Icon(Icons.Default.Add, contentDescription="Agregar")
+                Icon(Icons.Default.Add, contentDescription = "Add")
             }
         }
     ) { padding ->
-
         LazyColumn(
             contentPadding = padding,
-            modifier = modifier.padding(8.dp)
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+            modifier = Modifier.padding(8.dp)
         ) {
-            //componente de resumen
-            item{
+
+            item {
                 InfoResumen(
                     fecha = fechaActual,
-                    tareasCompletas = tareasCompletas,
-                    tareasPendientes = tareasPendientes
+                    tareasCompletas = completas,
+                    tareasPendientes  = incompletas
                 )
             }
-            //la lista de las tareas
-            items(tareas.size){ posicion ->
+
+            items(tareas.size) { tarea ->
                 ItemTarea(
-                    tarea = tareas[posicion],
-                    onClickItem = {},
+                    task = tareas[tarea],
+                    onClickItem = {
+                    },
                     onDeleteItem = {
-                        puente.eliminarTarea(tareas[posicion].id)
+                        viewModel.eliminarTarea(it)
                     },
                     onToggleCompletion = {
-                        puente.completarTarea(tareas[posicion])
-
+                        viewModel.completarTarea(it)
                     }
                 )
             }
-
         }
-
-
     }
-
 }

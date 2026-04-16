@@ -25,93 +25,99 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.upb.listadependientes.domain.Categoria
 import com.upb.listadependientes.domain.Tarea
+import kotlin.toString
 
 //@Preview(showBackground = true)
 @Composable
 fun ItemTarea(
     modifier: Modifier = Modifier,
-    tarea: Tarea,
-    onClickItem: (String) -> Unit,
-    onDeleteItem: (String) -> Unit,
-    onToggleCompletion: (Tarea) -> Unit
+    onClickItem:(String) -> Unit,
+    onDeleteItem:(String) -> Unit,
+    onToggleCompletion:(Tarea) -> Unit,
+    task:Tarea,
 ) {
-    Row(
+    Row (
         modifier = modifier
             .clickable {
-                onClickItem(tarea.id)
+                onClickItem(task.id)
             }
             .background(
-                color = MaterialTheme.colorScheme.surfaceContainer
+                color = MaterialTheme.colorScheme.surfaceContainer,
             )
-            .padding(
-                horizontal = 8.dp
-            ),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
+            .padding(horizontal = 8.dp)
+        ,
+        verticalAlignment = Alignment.CenterVertically
+    ){
         Checkbox(
-            checked = tarea.estado,
+            checked = task.estado,
             onCheckedChange = {
-                onToggleCompletion(tarea)
-            }
+                onToggleCompletion(
+                    task
+                )
+            },
         )
-
-        //contenedor de la informacion de las tareas
-        Column(
+        Column (
             horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.spacedBy(4.dp)
-        ) {
+            verticalArrangement = Arrangement.spacedBy(
+                4.dp
+            ),
+            modifier = Modifier.padding(
+                8.dp
+            ).weight(
+                1f
+            )
+        ){
             Text(
-                text = tarea.titulo,
+                text = task.titulo,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.titleSmall.copy(
-//                  textDecoration =  TextDecoration.LineThrough
-                    textDecoration = if (tarea.estado == true) TextDecoration.LineThrough else TextDecoration.None
+                    textDecoration = if(task.estado) TextDecoration.LineThrough
+                    else TextDecoration.None
                 ),
                 color = MaterialTheme.colorScheme.onPrimaryContainer
             )
-
-            if (tarea.estado == false) {
-                Text(
-                    text = tarea.descripcion,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-
-                Text(
-                    text = tarea.categoria.toString(),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+            if(!task.estado){
+                task.descripcion?.let {
+                    Text(
+                        text = it,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+                task.categoria?.let {
+                    Text(
+                        text = it.toString(),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
             }
-
         }
 
         Box {
             Icon(
                 imageVector = Icons.Default.Delete,
-                contentDescription = "",
+                contentDescription = "Delete Task",
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier
                     .padding(8.dp)
                     .clickable {
-                        onDeleteItem(tarea.id)
+                        onDeleteItem(task.id)
                     }
             )
-
         }
     }
-
 }
 
 @Preview(showBackground = true)
 @Composable
 fun PreviewItemTarea(){
     ItemTarea(
-      tarea = Tarea(
+      task = Tarea(
           id = "1",
           titulo = "Lavar platos",
           estado = false,
